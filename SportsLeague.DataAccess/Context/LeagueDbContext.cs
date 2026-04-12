@@ -72,7 +72,7 @@ public class LeagueDbContext : DbContext
             .HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
             .IsUnique();
 
-        // 🔥 SOLUCIÓN AL WARNING (IMPORTANTE)
+        // Guarda datos decimales con precisión (TournamentSponsor.ContractAmount)
         modelBuilder.Entity<TournamentSponsor>()
             .Property(ts => ts.ContractAmount)
             .HasPrecision(18, 2);
