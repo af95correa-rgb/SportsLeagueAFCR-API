@@ -12,6 +12,8 @@ public class LeagueDbContext : DbContext
     public DbSet<Referee> Referees { get; set; }
     public DbSet<Tournament> Tournaments { get; set; }
     public DbSet<TournamentTeam> TournamentTeams { get; set; }
+    public DbSet<Sponsor> Sponsors { get; set; }
+    public DbSet<TournamentSponsor> TournamentSponsors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,7 +24,7 @@ public class LeagueDbContext : DbContext
             .HasIndex(t => t.Name)
             .IsUnique();
 
-        // Player → Team (1:N) — si se elimina equipo, restringir
+        // Player → Team (1:N)
         modelBuilder.Entity<Player>()
             .HasOne(p => p.Team)
             .WithMany(t => t.Players)
@@ -43,9 +45,36 @@ public class LeagueDbContext : DbContext
             .HasForeignKey(tt => tt.TeamId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Índice único compuesto: un equipo solo puede inscribirse una vez por torneo
+        // Índice único compuesto (TournamentTeam)
         modelBuilder.Entity<TournamentTeam>()
             .HasIndex(tt => new { tt.TournamentId, tt.TeamId })
             .IsUnique();
+
+        // Sponsor: nombre único
+        modelBuilder.Entity<Sponsor>()
+            .HasIndex(s => s.Name)
+            .IsUnique();
+
+        // TournamentSponsor → Tournament (1:N)
+        modelBuilder.Entity<TournamentSponsor>()
+            .HasOne(ts => ts.Tournament)
+            .WithMany(t => t.TournamentSponsors)
+            .HasForeignKey(ts => ts.TournamentId);
+
+        // TournamentSponsor → Sponsor (1:N)
+        modelBuilder.Entity<TournamentSponsor>()
+            .HasOne(ts => ts.Sponsor)
+            .WithMany(s => s.TournamentSponsors)
+            .HasForeignKey(ts => ts.SponsorId);
+
+        // Índice único compuesto (TournamentSponsor)
+        modelBuilder.Entity<TournamentSponsor>()
+            .HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
+            .IsUnique();
+
+        // 🔥 SOLUCIÓN AL WARNING (IMPORTANTE)
+        modelBuilder.Entity<TournamentSponsor>()
+            .Property(ts => ts.ContractAmount)
+            .HasPrecision(18, 2);
     }
 }
