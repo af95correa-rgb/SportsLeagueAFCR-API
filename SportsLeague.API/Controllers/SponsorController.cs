@@ -57,9 +57,9 @@ public class SponsorController : ControllerBase
     // 🔗 N:M
 
     [HttpPost("{id}/tournaments")]
-    public async Task<ActionResult> Link(int id, [FromBody] dynamic dto)
+    public async Task<ActionResult> Link(int id, [FromBody] LinkSponsorDTO dto)
     {
-        await _service.LinkSponsorAsync(id, (int)dto.tournamentId, (decimal)dto.contractAmount);
+        await _service.LinkSponsorAsync(id, dto.TournamentId, dto.ContractAmount);
         return StatusCode(201);
     }
 
