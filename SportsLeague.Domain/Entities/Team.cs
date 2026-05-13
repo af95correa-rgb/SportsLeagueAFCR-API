@@ -11,4 +11,8 @@ public class Team : AuditBase
     // Navigation Properties
     public ICollection<Player> Players { get; set; } = new List<Player>();
     public ICollection<TournamentTeam> TournamentTeams { get; set; } = new List<TournamentTeam>();
+
+    // MATCHES
+    public ICollection<Match> HomeMatches { get; set; } = new List<Match>();
+    public ICollection<Match> AwayMatches { get; set; } = new List<Match>();
 }

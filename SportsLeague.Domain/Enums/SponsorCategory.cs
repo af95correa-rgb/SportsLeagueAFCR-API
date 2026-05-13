@@ -1,3 +1,5 @@
+namespace SportsLeague.Domain.Enums;
+
 public enum SponsorCategory
 {
     Main = 0,
