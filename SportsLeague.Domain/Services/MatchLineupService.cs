@@ -36,10 +36,10 @@ public class MatchLineupService : IMatchLineupService
         if (match == null)
             throw new KeyNotFoundException($"No se encontró el partido con ID {matchId}");
 
-        // V6: El partido debe estar en Scheduled
+        // V6: El partido debe estar en Programado
         if (match.Status != MatchStatus.Scheduled)
             throw new InvalidOperationException(
-                "Solo se pueden registrar alineaciones en partidos Scheduled");
+                "Solo se pueden registrar alineaciones en partidos Programado");
 
         // V2: El jugador existe
         var player = await _playerRepository.GetByIdAsync(lineup.PlayerId);
@@ -71,7 +71,7 @@ public class MatchLineupService : IMatchLineupService
         lineup.MatchId = matchId;
 
         _logger.LogInformation(
-            "Adding player {PlayerId} to lineup of match {MatchId}", lineup.PlayerId, matchId);
+            "Agregando Jugador {PlayerId} a formación del partido {MatchId}", lineup.PlayerId, matchId);
 
         return await _lineupRepository.CreateAsync(lineup);
     }
@@ -104,7 +104,7 @@ public class MatchLineupService : IMatchLineupService
         if (lineup == null)
             throw new KeyNotFoundException($"No se encontró el registro de alineación con ID {lineupId}");
 
-        _logger.LogInformation("Deleting lineup entry {LineupId}", lineupId);
+        _logger.LogInformation("Borrando alinación {LineupId}", lineupId);
         await _lineupRepository.DeleteAsync(lineup);
     }
 }

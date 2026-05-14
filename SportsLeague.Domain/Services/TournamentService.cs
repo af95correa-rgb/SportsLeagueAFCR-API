@@ -93,7 +93,7 @@ public class TournamentService : ITournamentService
         if (!validTransition)
             throw new InvalidOperationException(
                 $"Transición de estado inválida: {tournament.Status} → {newStatus}. " +
-                "Solo se permite: Pending → InProgress → Finished.");
+                "Solo se permite: Pendiente → En Progreso → Finalizado.");
 
         tournament.Status = newStatus;
         tournament.UpdatedAt = DateTime.UtcNow;

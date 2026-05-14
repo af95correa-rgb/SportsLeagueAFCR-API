@@ -161,7 +161,7 @@ public class StandingsService : IStandingsService
             .ThenByDescending(s => s.MatchesWithGoals)
             .ToList();
 
-        _logger.LogInformation("Generated top scorers for tournament {TournamentId}", tournamentId);
+        _logger.LogInformation("Generó los máximos goleadores para el torneo {TournamentId}", tournamentId);
         return topScorers;
     }
 
@@ -196,7 +196,7 @@ public class StandingsService : IStandingsService
             .ThenByDescending(s => s.YellowCards)
             .ToList();
 
-        _logger.LogInformation("Generated card stats for tournament {TournamentId}", tournamentId);
+        _logger.LogInformation("Estadísticas de cartas generadas para el torneo {TournamentId}", tournamentId);
         return cardStats;
     }
 }

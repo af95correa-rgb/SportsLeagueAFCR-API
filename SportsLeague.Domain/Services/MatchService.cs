@@ -42,7 +42,7 @@ public class MatchService : IMatchService
 
     public async Task<Match?> GetByIdAsync(int id)
     {
-        _logger.LogInformation("Retrieving match with ID: {MatchId}", id);
+        _logger.LogInformation("Recuperando partido con ID: {MatchId}", id);
         return await _matchRepository.GetByIdWithDetailsAsync(id);
     }
 
@@ -55,7 +55,7 @@ public class MatchService : IMatchService
 
         if (tournament.Status != TournamentStatus.InProgress)
             throw new InvalidOperationException(
-                "Solo se pueden programar partidos en torneos con estado InProgress");
+                "Solo se pueden programar partidos en torneos con estado En Progreso");
 
         // 2. Validar que los equipos son diferentes
         if (match.HomeTeamId == match.AwayTeamId)
@@ -90,7 +90,7 @@ public class MatchService : IMatchService
         match.Status = MatchStatus.Scheduled;
 
         _logger.LogInformation(
-            "Creating match: Team {Home} vs Team {Away} in Tournament {Tournament}",
+            "Creando Encuentro: Grupo {Home} vs Grupo {Away} en Torneo {Tournament}",
             match.HomeTeamId, match.AwayTeamId, match.TournamentId);
 
         return await _matchRepository.CreateAsync(match);
@@ -104,7 +104,7 @@ public class MatchService : IMatchService
 
         if (existing.Status != MatchStatus.Scheduled)
             throw new InvalidOperationException(
-                "Solo se pueden editar partidos con estado Scheduled");
+                "Solo se pueden editar partidos con estado Programado");
 
         if (match.HomeTeamId == match.AwayTeamId)
             throw new InvalidOperationException(
@@ -132,7 +132,7 @@ public class MatchService : IMatchService
         existing.Matchday = match.Matchday;
         existing.UpdatedAt = DateTime.UtcNow;
 
-        _logger.LogInformation("Updating match with ID: {MatchId}", id);
+        _logger.LogInformation("Actualizando encuentro con ID: {MatchId}", id);
         await _matchRepository.UpdateAsync(existing);
     }
 
@@ -144,9 +144,9 @@ public class MatchService : IMatchService
 
         if (existing.Status != MatchStatus.Scheduled)
             throw new InvalidOperationException(
-                "Solo se pueden eliminar partidos con estado Scheduled");
+                "Solo se pueden eliminar partidos con estado Programado");
 
-        _logger.LogInformation("Deleting match with ID: {MatchId}", id);
+        _logger.LogInformation("Borrando encuentro con ID: {MatchId}", id);
         await _matchRepository.DeleteAsync(id);
     }
 
@@ -173,7 +173,7 @@ public class MatchService : IMatchService
         match.UpdatedAt = DateTime.UtcNow;
 
         _logger.LogInformation(
-            "Updating match {MatchId} status to {NewStatus}", id, newStatus);
+            "Actualizando Encuentro {MatchId} estado a {NewStatus}", id, newStatus);
         await _matchRepository.UpdateAsync(match);
     }
 }

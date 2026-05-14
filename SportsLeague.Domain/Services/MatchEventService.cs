@@ -40,7 +40,7 @@ public class MatchEventService : IMatchEventService
 
         if (match.Status != MatchStatus.Finished)
             throw new InvalidOperationException(
-                "Solo se puede registrar resultado en partidos con estado Finished");
+                "Solo se puede registrar resultado en partidos con estado Finalizado");
 
         var existingResult = await _matchResultRepository.GetByMatchIdAsync(matchId);
         if (existingResult != null)
@@ -54,7 +54,7 @@ public class MatchEventService : IMatchEventService
         result.MatchId = matchId;
 
         _logger.LogInformation(
-            "Registering result for match {MatchId}: {Home}-{Away}",
+            "Registrando Resultados para encuentro {MatchId}: {Home}-{Away}",
             matchId, result.HomeGoals, result.AwayGoals);
         return await _matchResultRepository.CreateAsync(result);
     }
@@ -76,7 +76,7 @@ public class MatchEventService : IMatchEventService
         goal.MatchId = matchId;
 
         _logger.LogInformation(
-            "Registering goal: Match {MatchId}, Player {PlayerId}, Minute {Minute}",
+            "Registrando Gol: Encuentro {MatchId}, Jugador {PlayerId}, Minuto {Minute}",
             matchId, goal.PlayerId, goal.Minute);
         return await _goalRepository.CreateAsync(goal);
     }
@@ -106,7 +106,7 @@ public class MatchEventService : IMatchEventService
         card.MatchId = matchId;
 
         _logger.LogInformation(
-            "Registering {CardType} card: Match {MatchId}, Player {PlayerId}",
+            "Registrando {CardType} tarjeta: Encuentro {MatchId}, Jugador {PlayerId}",
             card.Type, matchId, card.PlayerId);
         return await _cardRepository.CreateAsync(card);
     }
