@@ -19,7 +19,13 @@ public class TournamentTeamRepository : GenericRepository<TournamentTeam>, ITour
             .Select(tt => tt.Team)
             .ToListAsync();
 
-    public async Task<TournamentTeam?> GetByTournamentAndTeamAsync(int tournamentId, int teamId) // ← NUEVO
+    public async Task<TournamentTeam?> GetByTournamentAndTeamAsync(int tournamentId, int teamId)
         => await _dbSet.FirstOrDefaultAsync(tt =>
             tt.TournamentId == tournamentId && tt.TeamId == teamId);
+
+    public async Task<IEnumerable<TournamentTeam>> GetByTournamentAsync(int tournamentId) // ← NUEVA
+        => await _dbSet
+            .Where(tt => tt.TournamentId == tournamentId)
+            .Include(tt => tt.Team)
+            .ToListAsync();
 }

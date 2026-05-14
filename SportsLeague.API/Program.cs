@@ -1,15 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using SportsLeague.API.Helpers;
-using SportsLeague.Domain.Helpers;
 using SportsLeague.API.Mappings;
 using SportsLeague.API.Middlewares;
-using SportsLeague.Domain.Services;
 using SportsLeague.DataAccess.Context;
 using SportsLeague.DataAccess.Repositories;
+using SportsLeague.DataAccess.Seeders;
+using SportsLeague.Domain.Helpers;
 using SportsLeague.Domain.Interfaces.Repositories;
 using SportsLeague.Domain.Interfaces.Services;
-using System.Text.Json.Serialization; // 👈 IMPORTANTE (AGREGADO)
-using SportsLeague.DataAccess.Seeders;
+using SportsLeague.Domain.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +21,8 @@ builder.Services.AddDbContext<LeagueDbContext>(options =>
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IMatchRepository, MatchRepository>();
 builder.Services.AddScoped<IMatchResultRepository, MatchResultRepository>();
+builder.Services.AddScoped<IGoalRepository, GoalRepository>();
+builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IRefereeRepository, RefereeRepository>();
 builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
@@ -29,17 +30,19 @@ builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<ITournamentSponsorRepository, TournamentSponsorRepository>();
 builder.Services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>();
-builder.Services.AddScoped<IGoalRepository, GoalRepository>();
-builder.Services.AddScoped<ICardRepository, CardRepository>();
 
 // ── Services ──
-builder.Services.AddScoped<IMatchService, SportsLeague.Domain.Services.MatchService>(); // ← era Application.Services
+builder.Services.AddScoped<IMatchService, MatchService>();
+builder.Services.AddScoped<IMatchEventService, MatchEventService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRefereeService, RefereeService>();
 builder.Services.AddScoped<ISponsorService, SponsorService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ITournamentService, TournamentService>();
-builder.Services.AddScoped<IMatchEventService, MatchEventService>();
+builder.Services.AddScoped<IStandingsService, StandingsService>();
+
+// ── Helpers ──
+builder.Services.AddScoped<MatchValidationHelper>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
@@ -48,13 +51,9 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // 🔥 FIX CLAVE: evita el 500 por ciclos en Include()
         options.JsonSerializerOptions.ReferenceHandler =
             ReferenceHandler.IgnoreCycles;
     });
-
-// ── Helper ──
-builder.Services.AddScoped<SportsLeague.Domain.Helpers.MatchValidationHelper>();
 
 // ── Swagger ──
 builder.Services.AddEndpointsApiExplorer();
