@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SportsLeague.DataAccess.Context;
 using SportsLeague.Domain.Entities;
 using SportsLeague.Domain.Interfaces.Repositories;
@@ -18,4 +18,8 @@ public class TournamentTeamRepository : GenericRepository<TournamentTeam>, ITour
             .Include(tt => tt.Team)
             .Select(tt => tt.Team)
             .ToListAsync();
+
+    public async Task<TournamentTeam?> GetByTournamentAndTeamAsync(int tournamentId, int teamId) // ← NUEVO
+        => await _dbSet.FirstOrDefaultAsync(tt =>
+            tt.TournamentId == tournamentId && tt.TeamId == teamId);
 }

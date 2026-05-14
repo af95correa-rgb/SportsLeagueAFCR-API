@@ -1,7 +1,8 @@
-using SportsLeague.Domain.Entities;
+﻿using SportsLeague.Domain.Entities;
 
 namespace SportsLeague.Domain.Interfaces.Repositories;
 
 public interface IRefereeRepository : IGenericRepository<Referee>
 {
+    Task<bool> ExistsAsync(int id); // ← NUEVO
 }

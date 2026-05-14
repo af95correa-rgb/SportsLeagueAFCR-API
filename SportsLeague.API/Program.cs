@@ -2,11 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using SportsLeague.API.Helpers;
 using SportsLeague.API.Mappings;
 using SportsLeague.API.Middlewares;
+using SportsLeague.Domain.Services;
 using SportsLeague.DataAccess.Context;
 using SportsLeague.DataAccess.Repositories;
 using SportsLeague.Domain.Interfaces.Repositories;
 using SportsLeague.Domain.Interfaces.Services;
-using SportsLeague.Domain.Services;
+using System.Text.Json.Serialization; // 👈 IMPORTANTE (AGREGADO)
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,7 @@ builder.Services.AddScoped<ITournamentSponsorRepository, TournamentSponsorReposi
 builder.Services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>();
 
 // ── Services ──
-builder.Services.AddScoped<IMatchService, MatchService>();
+builder.Services.AddScoped<IMatchService, SportsLeague.Domain.Services.MatchService>(); // ← era Application.Services
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRefereeService, RefereeService>();
 builder.Services.AddScoped<ISponsorService, SponsorService>();
@@ -39,7 +40,13 @@ builder.Services.AddScoped<ITournamentService, TournamentService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 // ── Controllers ──
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // 🔥 FIX CLAVE: evita el 500 por ciclos en Include()
+        options.JsonSerializerOptions.ReferenceHandler =
+            ReferenceHandler.IgnoreCycles;
+    });
 
 // ── Helper ──
 builder.Services.AddScoped<MatchValidationHelper>();
@@ -58,6 +65,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
