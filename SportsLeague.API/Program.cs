@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SportsLeague.API.Helpers;
+using SportsLeague.Domain.Helpers;
 using SportsLeague.API.Mappings;
 using SportsLeague.API.Middlewares;
 using SportsLeague.Domain.Services;
@@ -27,6 +28,8 @@ builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<ITournamentSponsorRepository, TournamentSponsorRepository>();
 builder.Services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>();
+builder.Services.AddScoped<IGoalRepository, GoalRepository>();
+builder.Services.AddScoped<ICardRepository, CardRepository>();
 
 // ── Services ──
 builder.Services.AddScoped<IMatchService, SportsLeague.Domain.Services.MatchService>(); // ← era Application.Services
@@ -35,6 +38,7 @@ builder.Services.AddScoped<IRefereeService, RefereeService>();
 builder.Services.AddScoped<ISponsorService, SponsorService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ITournamentService, TournamentService>();
+builder.Services.AddScoped<IMatchEventService, MatchEventService>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
@@ -49,7 +53,7 @@ builder.Services.AddControllers()
     });
 
 // ── Helper ──
-builder.Services.AddScoped<MatchValidationHelper>();
+builder.Services.AddScoped<SportsLeague.Domain.Helpers.MatchValidationHelper>();
 
 // ── Swagger ──
 builder.Services.AddEndpointsApiExplorer();

@@ -10,9 +10,10 @@ public class Player : AuditBase
     public int Number { get; set; }
     public PlayerPosition Position { get; set; }
 
-    // Foreign Key
     public int TeamId { get; set; }
-
-    // Navigation Property
     public Team Team { get; set; } = null!;
+
+    // NUEVAS
+    public ICollection<Goal> Goals { get; set; } = new List<Goal>();
+    public ICollection<Card> Cards { get; set; } = new List<Card>();
 }

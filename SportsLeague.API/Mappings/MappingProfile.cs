@@ -45,5 +45,22 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.AwayTeam.Name))
             .ForMember(dest => dest.RefereeFullName,
                 opt => opt.MapFrom(src => src.Referee.FirstName + " " + src.Referee.LastName));
+
+        // MatchResult
+        CreateMap<MatchResultRequestDTO, MatchResult>();
+        CreateMap<MatchResult, MatchResultResponseDTO>();
+
+        // Goal
+        CreateMap<GoalRequestDTO, Goal>();
+        CreateMap<Goal, GoalResponseDTO>()
+            .ForMember(dest => dest.PlayerName,
+                opt => opt.MapFrom(src => src.Player.FirstName + " " + src.Player.LastName));
+
+        // Card
+        CreateMap<CardRequestDTO, Card>();
+        CreateMap<Card, CardResponseDTO>()
+            .ForMember(dest => dest.PlayerName,
+                opt => opt.MapFrom(src => src.Player.FirstName + " " + src.Player.LastName));
+
     }
 }
