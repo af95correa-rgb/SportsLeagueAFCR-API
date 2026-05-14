@@ -1,4 +1,4 @@
-using SportsLeague.Domain.Enums;
+﻿using SportsLeague.Domain.Enums;
 
 namespace SportsLeague.Domain.Entities;
 
@@ -13,7 +13,7 @@ public class Player : AuditBase
     public int TeamId { get; set; }
     public Team Team { get; set; } = null!;
 
-    // NUEVAS
     public ICollection<Goal> Goals { get; set; } = new List<Goal>();
     public ICollection<Card> Cards { get; set; } = new List<Card>();
+    public ICollection<MatchLineup> Lineups { get; set; } = new List<MatchLineup>(); // ← NUEVA
 }

@@ -61,6 +61,15 @@ public class MappingProfile : Profile
         CreateMap<Card, CardResponseDTO>()
             .ForMember(dest => dest.PlayerName,
                 opt => opt.MapFrom(src => src.Player.FirstName + " " + src.Player.LastName));
+           
+
+        // MatchLineup
+        CreateMap<CreateMatchLineupDTO, MatchLineup>();
+        CreateMap<MatchLineup, MatchLineupResponseDTO>()
+            .ForMember(dest => dest.PlayerName,
+                opt => opt.MapFrom(src => src.Player.FirstName + " " + src.Player.LastName))
+            .ForMember(dest => dest.TeamName,
+                opt => opt.MapFrom(src => src.Player.Team.Name));
 
     }
 }

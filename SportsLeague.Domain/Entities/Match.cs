@@ -1,4 +1,4 @@
-using SportsLeague.Domain.Enums;
+﻿using SportsLeague.Domain.Enums;
 
 namespace SportsLeague.Domain.Entities;
 
@@ -13,16 +13,17 @@ public class Match : AuditBase
     public int Matchday { get; set; }
     public MatchStatus Status { get; set; } = MatchStatus.Scheduled;
 
-    // Propiedades de Navegaci�n
+    // Propiedades de Navegación
     public Tournament Tournament { get; set; } = null!;
     public Team HomeTeam { get; set; } = null!;
     public Team AwayTeam { get; set; } = null!;
     public Referee Referee { get; set; } = null!;
 
-    // Relaci�n 1:1 con Resultado
+    // Relación 1:1 con Resultado
     public MatchResult? MatchResult { get; set; }
 
     // Relaciones 1:N con Eventos
     public ICollection<Goal> Goals { get; set; } = new List<Goal>();
     public ICollection<Card> Cards { get; set; } = new List<Card>();
+    public ICollection<MatchLineup> Lineups { get; set; } = new List<MatchLineup>(); // ← NUEVA
 }
