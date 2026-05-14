@@ -9,6 +9,7 @@ using SportsLeague.DataAccess.Repositories;
 using SportsLeague.Domain.Interfaces.Repositories;
 using SportsLeague.Domain.Interfaces.Services;
 using System.Text.Json.Serialization; // 👈 IMPORTANTE (AGREGADO)
+using SportsLeague.DataAccess.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +64,15 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+// ── Data Seeder ──
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider
+        .GetRequiredService<LeagueDbContext>();
+    await context.Database.MigrateAsync();
+    await DataSeeder.SeedAsync(context);
+}
 
 // ── Middleware Pipeline ──
 if (app.Environment.IsDevelopment())
